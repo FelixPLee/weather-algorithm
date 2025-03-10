@@ -1,4 +1,7 @@
-# recebe valor referente a mês e 
+
+#array que guarda valores de temperaturas máximas
+#tempMeses = [34.3, 36, 31, 31.7,] * 12
+tempMeses =[None] * 12
 while True:
     #define variáveis no escopo global com valores que retornam erros caso não sejam fornecido valores
     mes = ''
@@ -8,9 +11,6 @@ while True:
 
     #Array de strings de meses do ano por extenso 
     mesesPorExtenso = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
-    tempMeses = [None] * 12
-    
-    
     #verifica se o numero de mês é valido
     while not(mesVerificado):
         mes = input("Digite o número do mês desejado: ")
@@ -37,12 +37,22 @@ while True:
                 print('A temperatura máxima no mes de {} foi de {}°C'.format(mesesPorExtenso[mes - 1], temp))
                 print('\n')
                 tempVerificado = True
-                tempMeses[mes] = temp
+                tempMeses[mes -1] = temp
             else: 
                 print('Valor invalido tente novamente\n')
         except ValueError:
             print('Valor invalido tente novamente\n')
 
+    #tabela de dados coletados
+    cabecalho = f"| {'Mês':<10} | {'Temperatura Máxima':<18} |"
+    linha_separadora = "+" + "-" * 12 + "+" + "-" * 20 + "+"
 
+    print(linha_separadora)
+    print(cabecalho) 
+    print(linha_separadora)
+    for index, mes in enumerate(mesesPorExtenso) :
+        linha = f'| {mes:<10} | {str(tempMeses[index]):^18} |'
+        print(linha)
+    print(linha_separadora)
 
         
