@@ -67,15 +67,37 @@ while True:
         #tabela de dados coletados
         cabecalho = f"| {'Mês':<10} | {'Temperatura Máxima':<18} |"
         linha_separadora = "+" + "-" * 12 + "+" + "-" * 20 + "+"
+        soma = 0
+        mesesEscald = 0
+        maisEscald = -61
+        menosEscal = 51
+        indexQuente = -1
+        indexFrio = -1
 
         print(linha_separadora)
         print(cabecalho) 
         print(linha_separadora)
         #loop de todos os valores de temperatura máxima com seu respectivo mes atrelado
-        for index, mes in enumerate(mesesPorExtenso) :
-            linha = f'| {mes:<10} | {str(tempMesesVisual[index]):^18} |'
+        for index, temperatura in enumerate(tempMesesVisual) :
+            linha = f'| {mesesPorExtenso[index]:<10} | {str(temperatura):^18} |'
             print(linha)
+            #soma todos os valores de temperatura para o calculo de média
+            soma += temperatura
+            if temperatura > 33: mesesEscald += 1
+            if temperatura > maisEscald: 
+                maisEscald = temperatura 
+                indexQuente = index
+            if temperatura < menosEscal:
+                menosEscal = temperatura
+                indexFrio = index
+
+
         print(linha_separadora)
+
+        print('Temperatura média máxima anual: ', soma/12, '\n')
+        print('Quantidade de meses escaldantes: ' , mesesEscald, '\n')
+        print('Mês mais escaldante do ano: ', mesesPorExtenso[indexQuente], '\n')
+        print('Mês menos quente do ano: ', mesesPorExtenso[indexFrio], '\n')
 
         
     if menu == 3: break
