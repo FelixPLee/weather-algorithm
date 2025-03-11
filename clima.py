@@ -64,7 +64,7 @@ while True:
         print('A temperatura máxima no mes de {} foi alterada para {}°C \n'.format(mesesPorExtenso[mes - 1], temp))
 
     if menu == 1:
-        #tabela de dados coletados
+        #inicialização de dados para cálculos e escrita da tabela
         cabecalho = f"| {'Mês':<10} | {'Temperatura Máxima':<18} |"
         linha_separadora = "+" + "-" * 12 + "+" + "-" * 20 + "+"
         soma = 0
@@ -74,6 +74,7 @@ while True:
         indexQuente = -1
         indexFrio = -1
 
+        #tabela de dados coletados
         print(linha_separadora)
         print(cabecalho) 
         print(linha_separadora)
@@ -83,10 +84,13 @@ while True:
             print(linha)
             #soma todos os valores de temperatura para o calculo de média
             soma += temperatura
+            #compara valores de temperatura maiores q 33 graus e armazena o numero de valores
             if temperatura > 33: mesesEscald += 1
+            #compara valores de temperatura armazenando sempre o maior valor e armazena o index da temperatura
             if temperatura > maisEscald: 
                 maisEscald = temperatura 
                 indexQuente = index
+            #armazena a menor temperatura e seu index
             if temperatura < menosEscal:
                 menosEscal = temperatura
                 indexFrio = index
@@ -96,6 +100,7 @@ while True:
 
         print('Temperatura média máxima anual: ', soma/12, '\n')
         print('Quantidade de meses escaldantes: ' , mesesEscald, '\n')
+        #utiliza o index de temperatura mais quente e mais fira para referenciar seu mês escrito por extenso
         print('Mês mais escaldante do ano: ', mesesPorExtenso[indexQuente], '\n')
         print('Mês menos quente do ano: ', mesesPorExtenso[indexFrio], '\n')
 
