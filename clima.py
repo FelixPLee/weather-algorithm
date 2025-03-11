@@ -6,60 +6,78 @@ while True:
     #define variáveis no escopo "global" (dentro da execução do laço) com valores que retornam erros caso não sejam fornecido valores
     mes = ''
     temp = ''
+    menu = ''
     # definindo flags de execução de alterações
     mesVerificado = False
     tempVerificado = False
+    menuVerificado = False
+    
+    #Array de strings de meses do ano por extenso 
+    mesesPorExtenso = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
     #array criado filtrando números 'float' sem valor decimal e os convertendo em inteiros por propósitos estéticos
     tempMesesVisual = [int(x) if x == int(x) else x for x in tempMeses]
 
+    #Função que pede ao usuário um valor numérico baseado em um pedido definido no segundo argumento da função.
+    #Além de verificar se o o valor é realmente um numero e esta dentro de determinado "Range".
+    def leituraDeValor(valor, pedido, max, min, flag, inteiro):
+        #Enquanto a falg não for desativada o algoritmo segue pedindo um valor válido até que o mesmo seja retornado pelo usuário
+        while not(flag):
+            valor = input(pedido)
+            print('\n')
+            #em caso de erro (devido falha na conversão de string para int) o algorítimo executa o bloco de código que segue abaixo do 'except'
+            try:
+                valor = float(valor)
+                #Confere se o valor fornecido está estabelecido no "Range" da função
+                if (valor <= max) and (valor >= min):
+                    #Caso o argumento "inteiro" seja definido como "True" verifica se o valor é um número inteiro
+                    if (inteiro == True) and (valor != int(valor)):
+                        print('Valor invalido\n') 
+                    elif inteiro == True:
+                        return int(valor) 
+                    else:
+                        flag = True
+                        return valor
+                #Mensagens de erro caso o valor seja maior ou menor que o solicitado ou não seja um numero
+                else: print('Valor invalido, informe um valor dentro do estabelecido\n')
+            except ValueError: print('Valor invalido\n')   
 
+    mensagemMenu = '''Digite o número da opção desejada:
+1 - Mostrar dados do clima
+2 - Editar dado
+3 - sair\n'''
 
-    #Array de strings de meses do ano por extenso 
-    mesesPorExtenso = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
-    #verifica se o numero de mês é valido
-    while not(mesVerificado):
-        mes = input("Digite o número do mês desejado: ")
-        print('\n')
-        #em caso de erro (devido falha na conversão de string para int) o algorítimo executa o bloco de código que segue abaixo do 'except'
-        try:
-            mes = int(mes)
-            if (mes <= 12) and (mes >= 1):
-                mesVerificado = True
-            else:
-                print('Valor invalido tente novamente \n')
-        except ValueError:
-            print('Valor invalido tente novamente \n')
+    menu = leituraDeValor(menu, mensagemMenu, 3, 1, menuVerificado, True)
 
+    
+    if menu == 2:
+        #Mensagem que vai Apresentada ao usuário pedindo o valor numérico do mês
+        mensagemMes = "Digite o número do mês desejado: "
+        #recebe valor de mês e verifica se o numero de mês é valido
+        mes = leituraDeValor(mes, mensagemMes, 12, 1, mesVerificado, True )
 
-    # Recebe o valor de temperatura
-    while not(tempVerificado):
-        temp = input("Digite o valor da temperatura máxima do mês: ")
-        print('\n')
-        #verifica se o valor de temperatura é um numero
-        try:
-            temp = float(temp)
-            if (temp > -60) and (temp < 50):
-                print('A temperatura máxima no mes de {} foi de {}°C'.format(mesesPorExtenso[mes - 1], temp))
-                print('\n')
-                tempVerificado = True
-                #guarda o valor recebido no array 'tempMeses'
-                tempMeses[mes -1] = temp
-            else: 
-                print('Valor invalido tente novamente\n')
-        except ValueError:
-            print('Valor invalido tente novamente\n')
+        # Recebe o valor de temperatura verifica se o numero de temperatura é valido
+        mensagemTemp = "Digite o valor da temperatura máxima do mês: "
+        temp = leituraDeValor(temp, mensagemTemp, 50, -60, tempVerificado, False)
 
-    #tabela de dados coletados
-    cabecalho = f"| {'Mês':<10} | {'Temperatura Máxima':<18} |"
-    linha_separadora = "+" + "-" * 12 + "+" + "-" * 20 + "+"
+        #guarda o valor recebido no array 'tempMeses'
+        tempMeses[mes -1] = temp
+        print('A temperatura máxima no mes de {} foi alterada para {}°C \n'.format(mesesPorExtenso[mes - 1], temp))
 
-    print(linha_separadora)
-    print(cabecalho) 
-    print(linha_separadora)
-    #loop de todos os valores de temperatura máxima com seu respectivo mes atrelado
-    for index, mes in enumerate(mesesPorExtenso) :
-        linha = f'| {mes:<10} | {str(tempMesesVisual[index]):^18} |'
-        print(linha)
-    print(linha_separadora)
+    if menu == 1:
+        #tabela de dados coletados
+        cabecalho = f"| {'Mês':<10} | {'Temperatura Máxima':<18} |"
+        linha_separadora = "+" + "-" * 12 + "+" + "-" * 20 + "+"
+
+        print(linha_separadora)
+        print(cabecalho) 
+        print(linha_separadora)
+        #loop de todos os valores de temperatura máxima com seu respectivo mes atrelado
+        for index, mes in enumerate(mesesPorExtenso) :
+            linha = f'| {mes:<10} | {str(tempMesesVisual[index]):^18} |'
+            print(linha)
+        print(linha_separadora)
+
+        
+    if menu == 3: break
 
         
