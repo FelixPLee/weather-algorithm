@@ -56,12 +56,42 @@ while True:
             except ValueError: print('Valor invalido\n')
 
     def intervaloDeData():
-        InicMesMen = 'Digite o valor nuérico referente ao mes inical da análise: '
-        InicMesMen = 'Digite o valor nuérico referente ao mes inical da análise: '
-        FinalMesAno = 'Digite o valor nuérico referente ao mes final da análise: '
-        FinalMesAno = 'Digite o valor nuérico referente ao mes final da análise: '
+        #registra valor de primeira e ultima data registrada no arquivo
+        ultimoAno = int(linhasCsv[-1][2])
+        ultimoMes = int(linhasCsv[-1][1])
+        PrimeiroAno = int(linhasCsv[1][2])
+        PrimeiroMes = int(linhasCsv[1][1])
+        #define flags de validação dos dados fornecidos
+        dataVerificada = False
+        inicAnoVerificado = False
+        inicMesVerificado = False
+        finalAnoVerificado = False 
+        finalMesVerificado = False
+        #mensagens apresentadas para receber valores iniciais e finais de dada
+        inicAnoMen = 'Digite o valor nuérico referente ao ano inical da análise: '
+        inicMesMen = 'Digite o valor nuérico referente ao mes inical da análise: '
+        finalAnoMen = 'Digite o valor nuérico referente ao ano final da análise: '
+        finalMesMen = 'Digite o valor nuérico referente ao mes final da análise: '
 
+        while dataVerificada == False:
+            inicAno = leituraDeValor(inicAno, inicAnoMen, 2016, 1961, inicAnoVerificado, True)
+            inicMes = leituraDeValor(inicMes, inicMesMen, 12, 1, inicMesVerificado, True)
+            finalAno = leituraDeValor(finalAno, finalAnoMen, 2016, 1961, finalAnoVerificado, True)
+            finalMes = leituraDeValor(finalMes, finalMesMen, 12, 1, finalMesVerificado, True)
         
+            if finalAno < inicAno:
+                print("Valores Fornecidos não congruentes")
+            elif (finalAno == inicAno) and (inicMes > finalMes):
+                print("Valores Fornecidos não congruentes")
+            elif (finalAno > ultimoAno) or ((finalAno == ultimoAno) and (finalMes > ultimoMes)):
+                print("Dado não registrado no arquivo")
+            elif (inicAno < PrimeiroAno) or ((inicAno == PrimeiroAno) and (inicMes < PrimeiroMes)):
+                print("Dado não registrado no arquivo")
+            else:
+                return [inicAno, inicMes, finalAno, finalMes]
+                dataVerificada =True
+            
+
                 
             
 
