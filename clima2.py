@@ -1,21 +1,33 @@
 while True:
     menuVerificado = False
-    linhasCsv = ''
+    linhasCsv = []
+
 
     def aberturaDeArquivo(arq):
-        with open(arq, 'r') as csv:
-            climaData = csv.reader(csv)
-            for linha in climaData: print(linha)
+        with open(arq, 'r') as csvClima:
+            for linha in csvClima:
+                valores = linha.split(',')
+                futuraTupla = []
+                try:
+                    futuraTupla.append(valores[0])
+                    for i in range (1, 6):
+                        futuraTupla.append(float(valores[i]))
+                    futuraTupla.append(float(valores[7].replace('\n', '')))
+                    linhasCsv.append(tuple(futuraTupla))
+                except:
+                    for i in range (0, 6): futuraTupla.append(valores[i])
+                    futuraTupla.append(valores[7].replace('\n', ''))
+                    linhasCsv.append(tuple(futuraTupla))
+
+                
+            
     #aberturaDeArquivo(input('Digite o nome do arquivo csv: '))
+    aberturaDeArquivo('testedata.csv')
+    
+    print(linhasCsv[0])
+    print(linhasCsv[1])
+    input('123')
 
-    with open('testedata.csv', 'r') as csvClima:
-        try:
-            for linha in csvClima: print(linha)
-            sucesso = input('suc')
-        except:
-            erro = input('123')
-
-    input('')
     def leituraDeValor(valor, pedido, max, min, flag, inteiro):
         while not(flag):
             valor = input(pedido)
