@@ -3,13 +3,14 @@ linhasCsv = []
 def aberturaDeArquivo(arq):
     with open(arq, 'r') as csvClima:
         # laço for que itera em cada linha do arquivo
+        print('oi')
         for linha in csvClima:
-            #separação 
+            #separação
             valores = linha.split(',')
             futuraTupla = []
             try:
                 #atribui valores da linha a lista que futuramente se trona a tupla inserida na lista  de linhas
-                futuraTupla.append(valores[0])
+                futuraTupla.append(tuple(valores[0].split('/')))
                 for i in range (1, 6):
                     futuraTupla.append(float(valores[i]))
                 futuraTupla.append(float(valores[7].replace('\n', '')))
@@ -22,7 +23,9 @@ def aberturaDeArquivo(arq):
                 linhasCsv.append(tuple(futuraTupla))
     #le arquivo indicado pelo usuário
     #aberturaDeArquivo(input('Digite o nome do arquivo csv: '))
-    aberturaDeArquivo('testedata.csv')
+aberturaDeArquivo('testedata.csv')
+
+print(linhasCsv[1])
 
 while True:
     #definindo e reinicializando flags
@@ -50,7 +53,15 @@ while True:
                         return valor
                 #Mensagens de erro caso o valor seja maior ou menor que o solicitado ou não seja um numero
                 else: print('Valor invalido, informe um valor dentro do estabelecido\n')
-            except ValueError: print('Valor invalido\n')   
+            except ValueError: print('Valor invalido\n')
+
+    def intervaloDeData():
+        InicMesMen = 'Digite o valor nuérico referente ao mes inical da análise: '
+        InicMesMen = 'Digite o valor nuérico referente ao mes inical da análise: '
+        FinalMesAno = 'Digite o valor nuérico referente ao mes final da análise: '
+        FinalMesAno = 'Digite o valor nuérico referente ao mes final da análise: '
+
+        
                 
             
 
@@ -64,4 +75,8 @@ while True:
     menu = leituraDeValor(menu, menuMen, 5, 1, menuVerificado, True)
 
     if menu == 1:
-        print("oi")
+        visualTipoMen = '''Digite o valor da opção que deseja acessar:
+1 - todos os dados
+2 - apenas os de precipitação
+3 - apenas os de temperatura
+4 - apenas os de umidade e vento'''
