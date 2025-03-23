@@ -3,35 +3,35 @@ linhasCsv = []
 def aberturaDeArquivo(arq):
     with open(arq, 'r') as csvClima:
         # laço for que itera em cada linha do arquivo
-        print('oi')
         for linha in csvClima:
             #separação
             valores = linha.split(',')
             futuraTupla = []
             try:
                 #atribui valores da linha a lista que futuramente se trona a tupla inserida na lista  de linhas
-                futuraTupla.append(tuple(valores[0].split('/')))
+                datas = valores[0].split('/')
+                #converte valores de data em int
+                intDatas = [int(x) for x in datas]
+                futuraTupla.append(intDatas)
                 for i in range (1, 6):
                     futuraTupla.append(float(valores[i]))
                 futuraTupla.append(float(valores[7].replace('\n', '')))
                 # lista é adicionada como tupla `q lista de tuplas de dados`
-                linhasCsv.append(tuple(futuraTupla))
+                linhasCsv.append(futuraTupla)
             except:
                 #atribui os valores de titulos aos valores da pirmeira linha por isso não tem conversão para float
                 for i in range (0, 6): futuraTupla.append(valores[i])
                 futuraTupla.append(valores[7].replace('\n', ''))
-                linhasCsv.append(tuple(futuraTupla))
+                linhasCsv.append(futuraTupla)
     #le arquivo indicado pelo usuário
     #aberturaDeArquivo(input('Digite o nome do arquivo csv: '))
 aberturaDeArquivo('testedata.csv')
-
+print(linhasCsv[15765])
 #registra valor de primeira e ultima data registrada no arquivo
 ultimoAno = int(linhasCsv[-1][0][2])
 ultimoMes = int(linhasCsv[-1][0][1])
 PrimeiroAno = int(linhasCsv[1][0][2])
 PrimeiroMes = int(linhasCsv[1][0][1])
-
-print(linhasCsv[-1])
 
 while True:
     #definindo e reinicializando flags
@@ -73,7 +73,6 @@ while True:
         inicMesMen = 'Digite o valor nuérico referente ao mes inical da análise: '
         finalAnoMen = 'Digite o valor nuérico referente ao ano final da análise: '
         finalMesMen = 'Digite o valor nuérico referente ao mes final da análise: '
-        teste = input('3')
         while dataVerificada == False:
             inicAno = ''
             inicMes = ''
@@ -93,12 +92,31 @@ while True:
             elif (inicAno < PrimeiroAno) or ((inicAno == PrimeiroAno) and (inicMes < PrimeiroMes)):
                 print("Dado não registrado no arquivo")
             else:
-                dataVerificada = True
-                return [inicAno, inicMes, finalAno, finalMes]
-            
+                inicIndex = 0
+                finalIndex = 0
+                anosBissexto = [1964, 1968, 1972, 1976, 1980, 1984, 1988, 1992, 1996, 2000, 2004, 2008, 2012, 2016, 2020]
+                print([1, inicMes, inicAno])
+                print([1, finalMes, finalAno])
+                for index, linha in enumerate(linhasCsv):
+                    if [1, inicMes, inicAno] in linha:
+                        input(linha)
+                        inicIndex = index
+                    if [1, finalMes, finalAno] in linha:
+                        input(linha)
+                        if finalMes == 2:
+                            finalIndex = index + 28
+                        elif (finalMes== 2) and (finalAno in anosBissexto):
+                            finalIndex = index + 29
+                        elif finalMes in [4,6,9,11]:
+                            finalIndex = index + 30
+                        else:
+                            finalIndex = index + 31
+                    if (inicIndex > 0) and (finalIndex > 0):
+                        dataVerificada = True
+                        input(linhasCsv[inicIndex])
+                        input(linhasCsv[finalIndex])
+                        return [inicIndex, finalIndex]
 
-                
-            
 
     menuMen = '''Digite o valor da opção que deseja acessar:
 1 - Visualização de intervalo de dados
@@ -119,7 +137,7 @@ while True:
 1 - todos os dados
 2 - apenas os de precipitação
 3 - apenas os de temperatura
-4 - apenas os de umidade e vento'''
+4 - apenas os de umidade e vento\n'''
 
     visualTipo = leituraDeValor(visualTipo, visualTipoMen, 4, 1, visualTipoVerificador, True)
 
