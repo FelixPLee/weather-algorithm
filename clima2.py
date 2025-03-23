@@ -25,7 +25,13 @@ def aberturaDeArquivo(arq):
     #aberturaDeArquivo(input('Digite o nome do arquivo csv: '))
 aberturaDeArquivo('testedata.csv')
 
-print(linhasCsv[1])
+#registra valor de primeira e ultima data registrada no arquivo
+ultimoAno = int(linhasCsv[-1][0][2])
+ultimoMes = int(linhasCsv[-1][0][1])
+PrimeiroAno = int(linhasCsv[1][0][2])
+PrimeiroMes = int(linhasCsv[1][0][1])
+
+print(linhasCsv[-1])
 
 while True:
     #definindo e reinicializando flags
@@ -56,11 +62,6 @@ while True:
             except ValueError: print('Valor invalido\n')
 
     def intervaloDeData():
-        #registra valor de primeira e ultima data registrada no arquivo
-        ultimoAno = int(linhasCsv[-1][2])
-        ultimoMes = int(linhasCsv[-1][1])
-        PrimeiroAno = int(linhasCsv[1][2])
-        PrimeiroMes = int(linhasCsv[1][1])
         #define flags de validação dos dados fornecidos
         dataVerificada = False
         inicAnoVerificado = False
@@ -72,8 +73,12 @@ while True:
         inicMesMen = 'Digite o valor nuérico referente ao mes inical da análise: '
         finalAnoMen = 'Digite o valor nuérico referente ao ano final da análise: '
         finalMesMen = 'Digite o valor nuérico referente ao mes final da análise: '
-
+        teste = input('3')
         while dataVerificada == False:
+            inicAno = ''
+            inicMes = ''
+            finalAno =''
+            finalMes =''
             inicAno = leituraDeValor(inicAno, inicAnoMen, 2016, 1961, inicAnoVerificado, True)
             inicMes = leituraDeValor(inicMes, inicMesMen, 12, 1, inicMesVerificado, True)
             finalAno = leituraDeValor(finalAno, finalAnoMen, 2016, 1961, finalAnoVerificado, True)
@@ -88,8 +93,8 @@ while True:
             elif (inicAno < PrimeiroAno) or ((inicAno == PrimeiroAno) and (inicMes < PrimeiroMes)):
                 print("Dado não registrado no arquivo")
             else:
+                dataVerificada = True
                 return [inicAno, inicMes, finalAno, finalMes]
-                dataVerificada =True
             
 
                 
@@ -100,13 +105,24 @@ while True:
 2 - Mês mais chuvoso
 3 - Média da temperatura mínima de um determinado mês
 4 - Gráfico de barras
-5 - Média geral da temperatura mínima de um determinado mês\n'''
+5 - Média geral da temperatura mínima de um determinado mês
+6 - sair\n'''
 
     menu = leituraDeValor(menu, menuMen, 5, 1, menuVerificado, True)
-
+    visualTipo = ''
     if menu == 1:
+        visualTipoVerificador = False
+
+        tempoAnalisado = intervaloDeData()
+        print(tempoAnalisado)
         visualTipoMen = '''Digite o valor da opção que deseja acessar:
 1 - todos os dados
 2 - apenas os de precipitação
 3 - apenas os de temperatura
 4 - apenas os de umidade e vento'''
+
+    visualTipo = leituraDeValor(visualTipo, visualTipoMen, 4, 1, visualTipoVerificador, True)
+
+
+
+    if menu == 6: break
