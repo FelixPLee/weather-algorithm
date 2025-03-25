@@ -1,3 +1,5 @@
+#importa biblioteca usada para graficos
+import matplotlib.pyplot as plt
 #inicializa uma lista onde sera guardada todos os dados do csv no qual cada item da lista será uma linha com seus dados atribuidos a valores de uma tupla
 linhasCsv = []
 def aberturaDeArquivo(arq):
@@ -95,27 +97,60 @@ while True:
                 inicIndex = 0
                 finalIndex = 0
                 anosBissexto = [1964, 1968, 1972, 1976, 1980, 1984, 1988, 1992, 1996, 2000, 2004, 2008, 2012, 2016, 2020]
-                print([1, inicMes, inicAno])
-                print([1, finalMes, finalAno])
                 for index, linha in enumerate(linhasCsv):
                     if [1, inicMes, inicAno] in linha:
-                        input(linha)
                         inicIndex = index
                     if [1, finalMes, finalAno] in linha:
-                        input(linha)
-                        if finalMes == 2:
+                        if (finalMes== 2) and (finalAno in anosBissexto):
                             finalIndex = index + 28
-                        elif (finalMes== 2) and (finalAno in anosBissexto):
-                            finalIndex = index + 29
+                        elif finalMes == 2:
+                            finalIndex = index + 27
                         elif finalMes in [4,6,9,11]:
-                            finalIndex = index + 30
+                            finalIndex = index + 29
                         else:
-                            finalIndex = index + 31
+                            finalIndex = index + 30
                     if (inicIndex > 0) and (finalIndex > 0):
                         dataVerificada = True
-                        input(linhasCsv[inicIndex])
-                        input(linhasCsv[finalIndex])
                         return [inicIndex, finalIndex]
+                    
+    def tabelaCompleta(inic, final):
+
+        cabecalho = '|    Data    | Precipitação (mm)   | Temperatura Máxima (°C)  | Temperatura Mínima (°C) | Umidade Relativa (%) | Velocidade do Vento (m/s) |'
+        separador = '+' + '-' * 12 + '+' + '-' * 21 + '+' + '-' * 26 + '+' + '-' * 25 + '+' + '-' * 22 + '+' + '-' * 27 + '+'
+        print(separador)
+        print(cabecalho)
+        for index in range(inic, final, 1):
+            dadosAtual = linhasCsv[index]
+            data = dadosAtual[0]
+            linha = f"| {data[0]:02d}/{data[1]:02d}/{data[2]} | {str(dadosAtual[1]):^19} | {str(dadosAtual[2]):^24} | {str(dadosAtual[3]):^23} | {str(dadosAtual[4]):^20} | {str(dadosAtual[5]):^25} |"
+            print(separador)
+            print(linha)
+        print(separador)
+
+    def tabelaIndividual(inic, final, identificador):
+        for index in range(inic, final, 1):
+            dadosAtual = linhasCsv[index]
+            separador = ''
+            if identificador == 2: 
+                dadoTitulo = ' Precipitação (mm)   |'
+                separador = '+' + '-' * 12 + '+' + '-' *21 + '+'
+                dado =  f'{str(dadosAtual[identificador -1]):^21} |'
+            elif identificador == 3: 
+                dadoTitulo = ' Temperatura Máxima (°C)  | Temperatura Mínima (°C) |'
+                separador = '+' + '-' * 12 + '+' + '-' * 26 + '+' + '-' * 25 + '+'
+                dado =  f'{str(dadosAtual[identificador -1]):^24} | {str(dadosAtual[identificador]):^25} |'
+            else:
+                dadoTitulo = ' Velocidade do Vento (m/s) |'
+                separador = '+' + '-' * 12 + '+' +  '-' * 27 + '+'
+                dado =  f'{str(dadosAtual[identificador +1]):^27} |'
+            print(separador)
+            print(cabecalho)
+            cabecalho = f'|    Data    |' + dadoTitulo
+            data = dadosAtual[0]
+            linha = f'| {data[0]:02d}/{data[1]:02d}/{data[2]} |' + dado
+            print(separador)
+            print(linha)
+        print(separador)
 
 
     menuMen = '''Digite o valor da opção que deseja acessar:
@@ -132,7 +167,6 @@ while True:
         visualTipoVerificador = False
 
         tempoAnalisado = intervaloDeData()
-        print(tempoAnalisado)
         visualTipoMen = '''Digite o valor da opção que deseja acessar:
 1 - todos os dados
 2 - apenas os de precipitação
@@ -140,7 +174,16 @@ while True:
 4 - apenas os de umidade e vento\n'''
 
     visualTipo = leituraDeValor(visualTipo, visualTipoMen, 4, 1, visualTipoVerificador, True)
+    if visualTipo == 1:
+        tabelaCompleta(tempoAnalisado[0], tempoAnalisado[1])
+    else:
+        tabelaIndividual(tempoAnalisado[0], tempoAnalisado[1], visualTipo)
 
-
+    if menu == 4:
+        categories = ['A', 'B', 'C', 'D']
+        values = [15, 20, 12, 25]
+        plt.bar(categories, values, color=['blue', 'green', 'red', 'cyan'])
+        plt.title('Bar Chart Example')
+        plt.show()
 
     if menu == 6: break
