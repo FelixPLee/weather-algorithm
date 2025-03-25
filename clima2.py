@@ -215,19 +215,30 @@ while True:
             tabelaIndividual(tempoAnalisado[0], tempoAnalisado[1], visualTipo)
     
     if menu == 2:
-        dataChuva = {'data': dados[0], 'valor': 1}
-        maiorValorMensalDe(dataChuva, linhasCsv) 
-        def maiorValorMensalDe(valores, intervalo):
-            mesTroca = 0
-            precipSoma = 0
-            mesesPrecp = []
-            for dados in intervalo:
-                mes = valores['data'][1]
-                if mes != mesTroca:
-                    mesesPrecp.append([mesTroca], [precipSoma])
-                    precipSoma = 0
-                precipSoma += valores['valor']
-                mesTroca = mes
+
+        def porMes(intervaloTempo, valor):
+            somaDoMes = 0
+            viraMes = 0
+            maiorValor = -999
+            dataMaiorValor = ''
+            for i in range(intervaloTempo[0], intervaloTempo[1]):
+                mesAtual = linhasCsv[i][0][1]
+                if viraMes != mesAtual:
+                    viraMes = mesAtual
+                    if somaDoMes > maiorValor:
+                        maiorValor = somaDoMes
+                        dataMaiorValor = linhasCsv[i-1][0]
+                        print(dataMaiorValor)
+                    #zera o valor da soma para passar para o proximo mex
+                    somaDoMes = 0
+                somaDoMes += linhasCsv[i][valor]
+            return [maiorValor, dataMaiorValor]
+
+
+
+            
+        chuvao = porMes([1, len(linhasCsv)], 1) 
+        print(chuvao)
 
 
     if menu == 4:
