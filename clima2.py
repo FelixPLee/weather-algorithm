@@ -111,19 +111,18 @@ while True:
                         dataVerificada = True
                         return [inicIndex, finalIndex]
                     
-    def intervaloDeMes():
+    def intervaloDeMes(anoMin, anoMax):
         #define flags de validação dos dados fornecidos
         dataVerificada = False
         inicAnoVerificado = False
         inicMesVerificado = False
         #mensagens apresentadas para receber valores iniciais e finais de dada
-        print('Serão considerados validos dados de janeiro de 2006 até Junho de 2016!')
         inicAnoMen = 'Digite o valor nuérico referente ao ano inicial da análise: '
         inicMesMen = 'Digite o valor nuérico referente ao mes inicial da análise: '
         while dataVerificada == False:
             inicAno = ''
             inicMes = ''
-            inicAno = leituraDeValor(inicAno, inicAnoMen, 2016, 2006, inicAnoVerificado, True)
+            inicAno = leituraDeValor(inicAno, inicAnoMen, anoMax, anoMin, inicAnoVerificado, True)
             inicMes = leituraDeValor(inicMes, inicMesMen, 12, 1, inicMesVerificado, True)
             if (inicAno > ultimoAno) or ((inicAno == ultimoAno) and (inicMes > ultimoMes)):
                 print("Dado não registrado no arquivo")
@@ -214,11 +213,28 @@ while True:
             tabelaCompleta(tempoAnalisado[0], tempoAnalisado[1])
         else:
             tabelaIndividual(tempoAnalisado[0], tempoAnalisado[1], visualTipo)
+    
+    if menu == 2:
+        dataChuva = {'data': dados[0], 'valor': 1}
+        maiorValorMensalDe(dataChuva, linhasCsv) 
+        def maiorValorMensalDe(valores, intervalo):
+            mesTroca = 0
+            precipSoma = 0
+            mesesPrecp = []
+            for dados in intervalo:
+                mes = valores['data'][1]
+                if mes != mesTroca:
+                    mesesPrecp.append([mesTroca], [precipSoma])
+                    precipSoma = 0
+                precipSoma += valores['valor']
+                mesTroca = mes
+
 
     if menu == 4:
         #importa biblioteca usada para graficos
         import matplotlib.pyplot as plt
-        tempoAnalisado = intervaloDeMes()
+        print('Serão considerados validos dados de janeiro de 2006 até Junho de 2016!')
+        tempoAnalisado = intervaloDeMes(2006, 2016)
         
         categories = ['A', 'B', 'C', 'D']
         values = [15, 20, 12, 25]
