@@ -1,5 +1,3 @@
-#importa biblioteca usada para graficos
-import matplotlib.pyplot as plt
 #inicializa uma lista onde sera guardada todos os dados do csv no qual cada item da lista será uma linha com seus dados atribuidos a valores de uma tupla
 linhasCsv = []
 def aberturaDeArquivo(arq):
@@ -71,8 +69,8 @@ while True:
         finalAnoVerificado = False 
         finalMesVerificado = False
         #mensagens apresentadas para receber valores iniciais e finais de dada
-        inicAnoMen = 'Digite o valor nuérico referente ao ano inical da análise: '
-        inicMesMen = 'Digite o valor nuérico referente ao mes inical da análise: '
+        inicAnoMen = 'Digite o valor nuérico referente ao ano inicial da análise: '
+        inicMesMen = 'Digite o valor nuérico referente ao mes inicial da análise: '
         finalAnoMen = 'Digite o valor nuérico referente ao ano final da análise: '
         finalMesMen = 'Digite o valor nuérico referente ao mes final da análise: '
         while dataVerificada == False:
@@ -113,6 +111,43 @@ while True:
                         dataVerificada = True
                         return [inicIndex, finalIndex]
                     
+    def intervaloDeMes():
+        #define flags de validação dos dados fornecidos
+        dataVerificada = False
+        inicAnoVerificado = False
+        inicMesVerificado = False
+        #mensagens apresentadas para receber valores iniciais e finais de dada
+        print('Serão considerados validos dados de janeiro de 2006 até Junho de 2016!')
+        inicAnoMen = 'Digite o valor nuérico referente ao ano inicial da análise: '
+        inicMesMen = 'Digite o valor nuérico referente ao mes inicial da análise: '
+        while dataVerificada == False:
+            inicAno = ''
+            inicMes = ''
+            inicAno = leituraDeValor(inicAno, inicAnoMen, 2016, 2006, inicAnoVerificado, True)
+            inicMes = leituraDeValor(inicMes, inicMesMen, 12, 1, inicMesVerificado, True)
+            if (inicAno > ultimoAno) or ((inicAno == ultimoAno) and (inicMes > ultimoMes)):
+                print("Dado não registrado no arquivo")
+            else:
+                inicIndex = 0
+                finalIndex = 0
+                anosBissexto = [1964, 1968, 1972, 1976, 1980, 1984, 1988, 1992, 1996, 2000, 2004, 2008, 2012, 2016, 2020]
+                for index, linha in enumerate(linhasCsv):
+                    if [1, inicMes, inicAno] in linha:
+                        inicIndex = index
+                        if (inicMes== 2) and (inicAno in anosBissexto):
+                            finalIndex = index + 28
+                        elif inicMes == 2:
+                            finalIndex = index + 27
+                        elif inicMes in [4,6,9,11]:
+                            finalIndex = index + 29
+                        else:
+                            finalIndex = index + 30
+                    if (inicIndex > 0) and (finalIndex > 0):
+                        dataVerificada = True
+                        return [inicIndex, finalIndex]
+
+
+
     def tabelaCompleta(inic, final):
 
         cabecalho = '|    Data    | Precipitação (mm)   | Temperatura Máxima (°C)  | Temperatura Mínima (°C) | Umidade Relativa (%) | Velocidade do Vento (m/s) |'
@@ -153,6 +188,7 @@ while True:
         print(separador)
 
 
+
     menuMen = '''Digite o valor da opção que deseja acessar:
 1 - Visualização de intervalo de dados
 2 - Mês mais chuvoso
@@ -173,17 +209,21 @@ while True:
 3 - apenas os de temperatura
 4 - apenas os de umidade e vento\n'''
 
-    visualTipo = leituraDeValor(visualTipo, visualTipoMen, 4, 1, visualTipoVerificador, True)
-    if visualTipo == 1:
-        tabelaCompleta(tempoAnalisado[0], tempoAnalisado[1])
-    else:
-        tabelaIndividual(tempoAnalisado[0], tempoAnalisado[1], visualTipo)
+        visualTipo = leituraDeValor(visualTipo, visualTipoMen, 4, 1, visualTipoVerificador, True)
+        if visualTipo == 1:
+            tabelaCompleta(tempoAnalisado[0], tempoAnalisado[1])
+        else:
+            tabelaIndividual(tempoAnalisado[0], tempoAnalisado[1], visualTipo)
 
     if menu == 4:
+        #importa biblioteca usada para graficos
+        import matplotlib.pyplot as plt
+        tempoAnalisado = intervaloDeMes()
+        
         categories = ['A', 'B', 'C', 'D']
         values = [15, 20, 12, 25]
         plt.bar(categories, values, color=['blue', 'green', 'red', 'cyan'])
         plt.title('Bar Chart Example')
-        plt.show()
+        #plt.show()
 
     if menu == 6: break
