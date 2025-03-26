@@ -166,12 +166,12 @@ while True:
                 contadorValores += 1
             if anoAtual != linhasCsv[index][0][2]:
                 media = somaMensal/contadorValores
-                chave = f'{mesesPorExtenso[inicMes -1]}{anoAtual}'
+                chave = f'{mesesPorExtenso[inicMes -1]} {anoAtual}'
                 meses.update({chave : media})
                 somaMensal = 0
                 contadorValores = 0
             anoAtual = linhasCsv[index][0][2]
-        meses.pop(f'{mesesPorExtenso[inicMes -1]}0')
+        meses.pop(f'{mesesPorExtenso[inicMes -1]} 0')
         return meses
 
 
@@ -274,12 +274,22 @@ while True:
         print(separador)
         print(cabecalho)
         print(separador)
+        print(separador)
         print(linha)
         print(separador)
 
     if menu == 3:
-         dicMeses = intervaloPorMesUnico(16437, len(linhasCsv), 3)
-         print(dicMeses)
+        dicMeses = intervaloPorMesUnico(16437, len(linhasCsv), 3)
+        cabecalho = '|      Data      |  Média de temperatura (mm)  |'
+        separador = '+' + '-' * 16 + '+' + '-' *29 + '+'
+        print(separador)
+        print(cabecalho)
+        print(separador)
+        for data, valor in dicMeses:
+            linha = f'|{data:^16}|{valor:^29}'
+            print(linha)
+            print(separador)
+             
 
     if menu == 4:
         #importa biblioteca usada para graficos
