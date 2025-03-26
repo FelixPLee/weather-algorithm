@@ -186,6 +186,23 @@ while True:
             print(linha)
         print(separador)
 
+    def porMes(intervaloTempo, valor):
+        somaDoMes = 0
+        viraMes = 0
+        maiorValor = -999
+        dataMaiorValor = ''
+        for i in range(intervaloTempo[0], intervaloTempo[1]):
+            mesAtual = linhasCsv[i][0][1]
+            if viraMes != mesAtual:
+                viraMes = mesAtual
+                if somaDoMes > maiorValor:
+                    maiorValor = somaDoMes
+                    dataMaiorValor = linhasCsv[i-1][0]
+                #zera o valor da soma para passar para o proximo mex
+                somaDoMes = 0
+            somaDoMes += linhasCsv[i][valor]
+        return {'SomaDeMaiorValor': maiorValor, 'Data': dataMaiorValor}
+
 
 
     menuMen = '''Digite o valor da opção que deseja acessar:
@@ -215,30 +232,22 @@ while True:
             tabelaIndividual(tempoAnalisado[0], tempoAnalisado[1], visualTipo)
     
     if menu == 2:
-
-        def porMes(intervaloTempo, valor):
-            somaDoMes = 0
-            viraMes = 0
-            maiorValor = -999
-            dataMaiorValor = ''
-            for i in range(intervaloTempo[0], intervaloTempo[1]):
-                mesAtual = linhasCsv[i][0][1]
-                if viraMes != mesAtual:
-                    viraMes = mesAtual
-                    if somaDoMes > maiorValor:
-                        maiorValor = somaDoMes
-                        dataMaiorValor = linhasCsv[i-1][0]
-                        print(dataMaiorValor)
-                    #zera o valor da soma para passar para o proximo mex
-                    somaDoMes = 0
-                somaDoMes += linhasCsv[i][valor]
-            return [maiorValor, dataMaiorValor]
-
-
-
-            
         chuvao = porMes([1, len(linhasCsv)], 1) 
-        print(chuvao)
+        dadoTitulo = ' Precipitação (mm)   |'
+        separador = '+' + '-' * 12 + '+' + '-' *21 + '+'
+        maiorPrecipitacao = chuvao['SomaDeMaiorValor']
+        dataMaiorPrecipitacao = chuvao['Data']
+        dado =  f'{str(maiorPrecipitacao):^20} |'
+        cabecalho = f'|    Data    |' + dadoTitulo
+        linha = f'| {dataMaiorPrecipitacao[0]:02d}/{dataMaiorPrecipitacao[1]:02d}/{dataMaiorPrecipitacao[2]} |' + dado
+        print(separador)
+        print(cabecalho)
+        print(separador)
+        print(linha)
+        print(separador)
+
+    if menu == 3:
+        print('oi')
 
 
     if menu == 4:
