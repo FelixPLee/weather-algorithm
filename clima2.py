@@ -117,8 +117,8 @@ while True:
         inicAnoVerificado = False
         inicMesVerificado = False
         #mensagens apresentadas para receber valores iniciais e finais de dada
-        inicAnoMen = 'Digite o valor nuérico referente ao ano inicial da análise: '
-        inicMesMen = 'Digite o valor nuérico referente ao mes inicial da análise: '
+        inicAnoMen = 'Digite o valor numérico referente ao ano inicial da análise: '
+        inicMesMen = 'Digite o valor numérico referente ao mes inicial da análise: '
         while dataVerificada == False:
             inicAno = ''
             inicMes = ''
@@ -144,6 +144,36 @@ while True:
                     if (inicIndex > 0) and (finalIndex > 0):
                         dataVerificada = True
                         return [inicIndex, finalIndex]
+    
+    def intervaloPorMesUnico(inic, final, valor):
+        meses  = {}
+        mesesPorExtenso = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
+        somaMensal = 0
+        contadorValores = 1
+        anoAtual = 0
+        #define flags de validação dos dados fornecidos
+        dataVerificada = False
+        inicMesVerificado = False
+        #mensagens apresentadas para receber valores iniciais e finais de dada
+        inicMesMen = 'Digite o valor numérico referente ao mes da análise: '
+        while dataVerificada == False:
+            inicMes = ''
+            inicMes = leituraDeValor(inicMes, inicMesMen, 12, 1, inicMesVerificado, True)
+            dataVerificada = True
+        for index in range(inic, final):
+            if linhasCsv[index][0][1] == inicMes:
+                somaMensal += linhasCsv[index][valor]
+                contadorValores += 1
+            if anoAtual != linhasCsv[index][0][2]:
+                media = somaMensal/contadorValores
+                chave = f'{mesesPorExtenso[inicMes -1]}{anoAtual}'
+                meses.update({chave : media})
+                somaMensal = 0
+                contadorValores = 0
+            anoAtual = linhasCsv[index][0][2]
+        meses.pop(f'{mesesPorExtenso[inicMes -1]}0')
+        return meses
+
 
 
 
@@ -213,12 +243,13 @@ while True:
 5 - Média geral da temperatura mínima de um determinado mês
 6 - sair\n'''
 
-    menu = leituraDeValor(menu, menuMen, 5, 1, menuVerificado, True)
+    menu = leituraDeValor(menu, menuMen, 6, 1, menuVerificado, True)
     visualTipo = ''
     if menu == 1:
         visualTipoVerificador = False
 
         tempoAnalisado = intervaloDeData()
+        print(tempoAnalisado[0])
         visualTipoMen = '''Digite o valor da opção que deseja acessar:
 1 - todos os dados
 2 - apenas os de precipitação
@@ -247,8 +278,8 @@ while True:
         print(separador)
 
     if menu == 3:
-        print('oi')
-
+         dicMeses = intervaloPorMesUnico(16437, len(linhasCsv), 3)
+         print(dicMeses)
 
     if menu == 4:
         #importa biblioteca usada para graficos
