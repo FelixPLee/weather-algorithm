@@ -1,4 +1,4 @@
-#inicializa uma lista onde sera guardada todos os dados do csv no qual cada item da lista será uma linha com seus dados atribuidos a valores de uma tupla
+#inicializa uma lista onde sera guardada todos os dados do csv no qual cada item da lista será uma linha com seus dados atribuídos a valores de uma lista
 linhasCsv = []
 def aberturaDeArquivo(arq):
     with open(arq, 'r') as csvClima:
@@ -8,7 +8,6 @@ def aberturaDeArquivo(arq):
             valores = linha.split(',')
             futuraLinha = []
             try:
-                #atribui valores da linha a lista que futuramente se trona a tupla inserida na lista  de linhas
                 datas = valores[0].split('/')
                 #converte valores de data em int
                 intDatas = [int(x) for x in datas]
@@ -16,7 +15,6 @@ def aberturaDeArquivo(arq):
                 for i in range (1, 6):
                     futuraLinha.append(float(valores[i]))
                 futuraLinha.append(float(valores[7].replace('\n', '')))
-                # lista é adicionada como tupla `q lista de tuplas de dados`
                 linhasCsv.append(futuraLinha)
             except:
                 #atribui os valores de titulos aos valores da pirmeira linha por isso não tem conversão para float
@@ -285,20 +283,21 @@ while True:
         plt.xlabel(f'Meses de {mes} ao longo')
         plt.ylabel('Temperatura em °C')
         plt.title(f'Médias de temperatura mínima de {mes}')
-        plt.show()
+        plt.show(block=False)
+        input("Press Enter to close the figure...")
         plt.close()
 
     if menu == 5:
         if dicGrafico == {}:
             print('É preciso definir um mes na opção de grafico para acessar essa funcionalidade \n')
         else:
-            somaTotal
+            somaTotal =0
             contador = 0
             for temp in dicGrafico.values():
                 somaTotal += temp
                 contador += 1
             mediaGeral = somaTotal/contador
-            if mesesPorExtenso.find(mes) > 6: anoFinal = 2015
+            if mesesPorExtenso.index(mes) > 6: anoFinal = 2015
             else: anoFinal = 2016
             Frase = f' A média geral de temperatura mínima dos meses de {mes} de 2006 até {anoFinal} foi de: {mediaGeral}°C'
     
