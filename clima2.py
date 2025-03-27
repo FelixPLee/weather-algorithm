@@ -139,8 +139,9 @@ while True:
         meses  = {}
         mesesPorExtenso = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
         somaMensal = 0
-        contadorValores = 1
+        contadorValores = 0
         anoAtual = 0
+        mesAtual = 0
         #define flags de validação dos dados fornecidos
         dataVerificada = False
         inicMesVerificado = False
@@ -151,17 +152,18 @@ while True:
             inicMes = leituraDeValor(inicMes, inicMesMen, 12, 1, inicMesVerificado, True)
             dataVerificada = True
         for index in range(inic, final):
+            diaAtual = linhasCsv[index][0][0]
             if linhasCsv[index][0][1] == inicMes:
                 somaMensal += linhasCsv[index][valor]
-                contadorValores += 1
-            if anoAtual != linhasCsv[index][0][2]:
+                contadorValores = contadorValores + 1
+            if (mesAtual != inicMes) and ([diaAtual ,mesAtual, anoAtual] == [1, inicMes +1, anoAtual]):
                 media = round(somaMensal/contadorValores)
                 chave = f'{mesesPorExtenso[inicMes -1]} {anoAtual}'
                 meses.update({chave : media})
                 somaMensal = 0
                 contadorValores = 0
+            mesAtual = linhasCsv[index][0][1]
             anoAtual = linhasCsv[index][0][2]
-        meses.pop(f'{mesesPorExtenso[inicMes -1]} 0')
         return [meses, mesesPorExtenso[inicMes -1]]
 
 ####################CRIAÇÃO DE TABELAS####################
@@ -253,7 +255,7 @@ while True:
         print('Serão considerados validos dados de janeiro de 2006 até Junho de 2016!')
         mediaporMes = mediaPorMesUnico(16437, len(linhasCsv), 3)
         dicMeses = mediaporMes[0]
-        cabecalho = '|      Data      |  Média de temperatura mínima (mm)  |'
+        cabecalho = '|      Data      |  Média de temperatura mínima (°C)  |'
         separador = '+' + '-' * 16 + '+' + '-' *35 + '+'
         print(separador)
         print(cabecalho)
