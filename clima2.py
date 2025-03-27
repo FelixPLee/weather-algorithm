@@ -111,39 +111,6 @@ while True:
                         dataVerificada = True
                         return [inicIndex, finalIndex]
                     
-    def intervaloDeMes(anoMin, anoMax):
-        #define flags de validação dos dados fornecidos
-        dataVerificada = False
-        inicAnoVerificado = False
-        inicMesVerificado = False
-        #mensagens apresentadas para receber valores iniciais e finais de dada
-        inicAnoMen = 'Digite o valor numérico referente ao ano inicial da análise: '
-        inicMesMen = 'Digite o valor numérico referente ao mes inicial da análise: '
-        while dataVerificada == False:
-            inicAno = ''
-            inicMes = ''
-            inicAno = leituraDeValor(inicAno, inicAnoMen, anoMax, anoMin, inicAnoVerificado, True)
-            inicMes = leituraDeValor(inicMes, inicMesMen, 12, 1, inicMesVerificado, True)
-            if (inicAno > ultimoAno) or ((inicAno == ultimoAno) and (inicMes > ultimoMes)):
-                print("Dado não registrado no arquivo")
-            else:
-                inicIndex = 0
-                finalIndex = 0
-                anosBissexto = [1964, 1968, 1972, 1976, 1980, 1984, 1988, 1992, 1996, 2000, 2004, 2008, 2012, 2016, 2020]
-                for index, linha in enumerate(linhasCsv):
-                    if [1, inicMes, inicAno] in linha:
-                        inicIndex = index
-                        if (inicMes== 2) and (inicAno in anosBissexto):
-                            finalIndex = index + 28
-                        elif inicMes == 2:
-                            finalIndex = index + 27
-                        elif inicMes in [4,6,9,11]:
-                            finalIndex = index + 29
-                        else:
-                            finalIndex = index + 30
-                    if (inicIndex > 0) and (finalIndex > 0):
-                        dataVerificada = True
-                        return [inicIndex, finalIndex]
     
     def intervaloPorMesUnico(inic, final, valor):
         meses  = {}
@@ -165,14 +132,14 @@ while True:
                 somaMensal += linhasCsv[index][valor]
                 contadorValores += 1
             if anoAtual != linhasCsv[index][0][2]:
-                media = somaMensal/contadorValores
+                media = round(somaMensal/contadorValores)
                 chave = f'{mesesPorExtenso[inicMes -1]} {anoAtual}'
                 meses.update({chave : media})
                 somaMensal = 0
                 contadorValores = 0
             anoAtual = linhasCsv[index][0][2]
         meses.pop(f'{mesesPorExtenso[inicMes -1]} 0')
-        return meses
+        return [meses, mesesPorExtenso[inicMes -1]]
 
 
 
@@ -279,14 +246,16 @@ while True:
         print(separador)
 
     if menu == 3:
-        dicMeses = intervaloPorMesUnico(16437, len(linhasCsv), 3)
-        cabecalho = '|      Data      |  Média de temperatura (mm)  |'
-        separador = '+' + '-' * 16 + '+' + '-' *29 + '+'
+        print('Serão considerados validos dados de janeiro de 2006 até Junho de 2016!')
+        mediaporMes = intervaloPorMesUnico(16437, len(linhasCsv), 3)
+        dicMeses = mediaporMes[0]
+        cabecalho = '|      Data      |  Média de temperatura mínima (mm)  |'
+        separador = '+' + '-' * 16 + '+' + '-' *35 + '+'
         print(separador)
         print(cabecalho)
         print(separador)
-        for data, valor in dicMeses:
-            linha = f'|{data:^16}|{valor:^29}'
+        for data, valor in dicMeses.items():
+            linha = f'|{data:^16}|{valor:^35}|'
             print(linha)
             print(separador)
              
@@ -295,12 +264,16 @@ while True:
         #importa biblioteca usada para graficos
         import matplotlib.pyplot as plt
         print('Serão considerados validos dados de janeiro de 2006 até Junho de 2016!')
-        tempoAnalisado = intervaloDeMes(2006, 2016)
-        
-        categories = ['A', 'B', 'C', 'D']
-        values = [15, 20, 12, 25]
-        plt.bar(categories, values, color=['blue', 'green', 'red', 'cyan'])
-        plt.title('Bar Chart Example')
-        #plt.show()
+        mediaporMes = intervaloPorMesUnico(16437, len(linhasCsv), 3)
+        dicMeses = mediaporMes[0]
+        mes = mediaporMes[1]
+        meses = dicMeses.keys()
+        valores = dicMeses.values()
+
+        plt.bar(meses,valores)
+        plt.xlabel(f'Meses de {mes} ao longo')
+        plt.ylabel('Temperatura em °C')
+        plt.title(f'Médias de temperatura mínima de {mes}')
+        plt.show()
 
     if menu == 6: break
