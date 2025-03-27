@@ -6,23 +6,23 @@ def aberturaDeArquivo(arq):
         for linha in csvClima:
             #separação
             valores = linha.split(',')
-            futuraTupla = []
+            futuraLinha = []
             try:
                 #atribui valores da linha a lista que futuramente se trona a tupla inserida na lista  de linhas
                 datas = valores[0].split('/')
                 #converte valores de data em int
                 intDatas = [int(x) for x in datas]
-                futuraTupla.append(intDatas)
+                futuraLinha.append(intDatas)
                 for i in range (1, 6):
-                    futuraTupla.append(float(valores[i]))
-                futuraTupla.append(float(valores[7].replace('\n', '')))
+                    futuraLinha.append(float(valores[i]))
+                futuraLinha.append(float(valores[7].replace('\n', '')))
                 # lista é adicionada como tupla `q lista de tuplas de dados`
-                linhasCsv.append(futuraTupla)
+                linhasCsv.append(futuraLinha)
             except:
                 #atribui os valores de titulos aos valores da pirmeira linha por isso não tem conversão para float
-                for i in range (0, 6): futuraTupla.append(valores[i])
-                futuraTupla.append(valores[7].replace('\n', ''))
-                linhasCsv.append(futuraTupla)
+                for i in range (0, 6): futuraLinha.append(valores[i])
+                futuraLinha.append(valores[7].replace('\n', ''))
+                linhasCsv.append(futuraLinha)
     #le arquivo indicado pelo usuário
     #aberturaDeArquivo(input('Digite o nome do arquivo csv: '))
 aberturaDeArquivo('testedata.csv')
@@ -38,6 +38,8 @@ while True:
     menuVerificado = False
     #definindo e reinicializando variveis
     menu = ''
+
+####################FUNÇÃO QUE LE ARQUIVO####################
 
     def leituraDeValor(valor, pedido, max, min, flag, inteiro):
         #Enquanto a falg não for desativada o algoritmo segue pedindo um valor válido até que o mesmo seja retornado pelo usuário
@@ -61,6 +63,9 @@ while True:
                 else: print('Valor invalido, informe um valor dentro do estabelecido\n')
             except ValueError: print('Valor invalido\n')
 
+####################FUNÇÃO DE EXECUÇÃO DE EVENTOS####################
+
+    #função utilizada na solução do evento 1
     def intervaloDeData():
         #define flags de validação dos dados fornecidos
         dataVerificada = False
@@ -110,9 +115,27 @@ while True:
                     if (inicIndex > 0) and (finalIndex > 0):
                         dataVerificada = True
                         return [inicIndex, finalIndex]
-                    
+
+    #Função utilizada na solução do evento 2    
+    def porMes(intervaloTempo, valor):
+        somaDoMes = 0
+        viraMes = 0
+        maiorValor = -999
+        dataMaiorValor = ''
+        for i in range(intervaloTempo[0], intervaloTempo[1]):
+            mesAtual = linhasCsv[i][0][1]
+            if viraMes != mesAtual:
+                viraMes = mesAtual
+                if somaDoMes > maiorValor:
+                    maiorValor = somaDoMes
+                    dataMaiorValor = linhasCsv[i-1][0]
+                #zera o valor da soma para passar para o proximo mex
+                somaDoMes = 0
+            somaDoMes += linhasCsv[i][valor]
+        return {'SomaDeMaiorValor': maiorValor, 'Data': dataMaiorValor}
     
-    def intervaloPorMesUnico(inic, final, valor):
+    #Função utilizada na solução do evento 3 e 4 
+    def mediaPorMesUnico(inic, final, valor):
         meses  = {}
         mesesPorExtenso = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
         somaMensal = 0
@@ -141,11 +164,9 @@ while True:
         meses.pop(f'{mesesPorExtenso[inicMes -1]} 0')
         return [meses, mesesPorExtenso[inicMes -1]]
 
-
-
+####################CRIAÇÃO DE TABELAS####################
 
     def tabelaCompleta(inic, final):
-
         cabecalho = '|    Data    | Precipitação (mm)   | Temperatura Máxima (°C)  | Temperatura Mínima (°C) | Umidade Relativa (%) | Velocidade do Vento (m/s) |'
         separador = '+' + '-' * 12 + '+' + '-' * 21 + '+' + '-' * 26 + '+' + '-' * 25 + '+' + '-' * 22 + '+' + '-' * 27 + '+'
         print(separador)
@@ -183,24 +204,7 @@ while True:
             print(linha)
         print(separador)
 
-    def porMes(intervaloTempo, valor):
-        somaDoMes = 0
-        viraMes = 0
-        maiorValor = -999
-        dataMaiorValor = ''
-        for i in range(intervaloTempo[0], intervaloTempo[1]):
-            mesAtual = linhasCsv[i][0][1]
-            if viraMes != mesAtual:
-                viraMes = mesAtual
-                if somaDoMes > maiorValor:
-                    maiorValor = somaDoMes
-                    dataMaiorValor = linhasCsv[i-1][0]
-                #zera o valor da soma para passar para o proximo mex
-                somaDoMes = 0
-            somaDoMes += linhasCsv[i][valor]
-        return {'SomaDeMaiorValor': maiorValor, 'Data': dataMaiorValor}
-
-
+####################EXECUÇÃO DE EVENTOS####################
 
     menuMen = '''Digite o valor da opção que deseja acessar:
 1 - Visualização de intervalo de dados
@@ -247,7 +251,7 @@ while True:
 
     if menu == 3:
         print('Serão considerados validos dados de janeiro de 2006 até Junho de 2016!')
-        mediaporMes = intervaloPorMesUnico(16437, len(linhasCsv), 3)
+        mediaporMes = mediaPorMesUnico(16437, len(linhasCsv), 3)
         dicMeses = mediaporMes[0]
         cabecalho = '|      Data      |  Média de temperatura mínima (mm)  |'
         separador = '+' + '-' * 16 + '+' + '-' *35 + '+'
@@ -264,7 +268,7 @@ while True:
         #importa biblioteca usada para graficos
         import matplotlib.pyplot as plt
         print('Serão considerados validos dados de janeiro de 2006 até Junho de 2016!')
-        mediaporMes = intervaloPorMesUnico(16437, len(linhasCsv), 3)
+        mediaporMes = mediaPorMesUnico(16437, len(linhasCsv), 3)
         dicMeses = mediaporMes[0]
         mes = mediaporMes[1]
         meses = dicMeses.keys()
