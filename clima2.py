@@ -33,6 +33,9 @@ ultimoMes = int(linhasCsv[-1][0][1])
 PrimeiroAno = int(linhasCsv[1][0][2])
 PrimeiroMes = int(linhasCsv[1][0][1])
 
+mediaporMes = []
+dicGrafico = {}
+mes = ''
 while True:
     #definindo e reinicializando flags
     menuVerificado = False
@@ -209,11 +212,11 @@ while True:
 ####################EXECUÇÃO DE EVENTOS####################
 
     menuMen = '''Digite o valor da opção que deseja acessar:
-1 - Visualização de intervalo de dados
-2 - Mês mais chuvoso
-3 - Média da temperatura mínima de um determinado mês
-4 - Gráfico de barras
-5 - Média geral da temperatura mínima de um determinado mês
+1 - Visualização de intervalo de dados.
+2 - Mês mais chuvoso.
+3 - Média da temperatura mínima de um determinado mês.
+4 - Gráfico de barras  com as médias de temperatura mínima de um determinado mês nos últimos 11 anos.
+5 - Média geral da temperatura mínima do mes determinado no gráfico.
 6 - sair\n'''
 
     menu = leituraDeValor(menu, menuMen, 6, 1, menuVerificado, True)
@@ -265,21 +268,39 @@ while True:
             print(linha)
             print(separador)
              
-
+    mesesPorExtenso = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
     if menu == 4:
         #importa biblioteca usada para graficos
         import matplotlib.pyplot as plt
         print('Serão considerados validos dados de janeiro de 2006 até Junho de 2016!')
         mediaporMes = mediaPorMesUnico(16437, len(linhasCsv), 3)
-        dicMeses = mediaporMes[0]
+        dicGrafico = mediaporMes[0]
         mes = mediaporMes[1]
-        meses = dicMeses.keys()
-        valores = dicMeses.values()
+        meses = dicGrafico.keys()
+        valores = dicGrafico.values()
 
-        plt.bar(meses,valores)
+        plt.bar(meses,valores, width = 0.7)
+        plt.xticks(rotation=45)  #Rotaciona o label em 45 graus
+        plt.tight_layout() #Ajusta o espaçamento
         plt.xlabel(f'Meses de {mes} ao longo')
         plt.ylabel('Temperatura em °C')
         plt.title(f'Médias de temperatura mínima de {mes}')
         plt.show()
+        plt.close()
+
+    if menu == 5:
+        if dicGrafico == {}:
+            print('É preciso definir um mes na opção de grafico para acessar essa funcionalidade \n')
+        else:
+            somaTotal
+            contador = 0
+            for temp in dicGrafico.values():
+                somaTotal += temp
+                contador += 1
+            mediaGeral = somaTotal/contador
+            if mesesPorExtenso.find(mes) > 6: anoFinal = 2015
+            else: anoFinal = 2016
+            Frase = f' A média geral de temperatura mínima dos meses de {mes} de 2006 até {anoFinal} foi de: {mediaGeral}°C'
+    
 
     if menu == 6: break
