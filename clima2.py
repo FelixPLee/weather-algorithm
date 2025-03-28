@@ -157,6 +157,9 @@ while True:
             if linhasCsv[index][0][1] == inicMes:
                 somaMensal += linhasCsv[index][valor]
                 contadorValores = contadorValores + 1
+            if diaAtual == 1 and mesAtual == 1:
+                if index -1 != inic:
+                    mesAtual = 13
             if (mesAtual != inicMes) and ([diaAtual ,mesAtual, anoAtual] == [1, inicMes +1, anoAtual]):
                 media = round(somaMensal/contadorValores)
                 chave = f'{mesesPorExtenso[inicMes -1]} {anoAtual}'
@@ -299,7 +302,8 @@ while True:
             mediaGeral = somaTotal/contador
             if mesesPorExtenso.index(mes) > 6: anoFinal = 2015
             else: anoFinal = 2016
-            Frase = f' A média geral de temperatura mínima dos meses de {mes} de 2006 até {anoFinal} foi de: {mediaGeral}°C'
+            frase = f' A média geral de temperatura mínima dos meses de {mes} de 2006 até {anoFinal} foi de: {mediaGeral}°C'
+            print(frase)
     
 
     if menu == 6: break
